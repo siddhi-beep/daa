@@ -1,0 +1,41 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+contract MarksManagmtSys {
+
+    struct Student {
+        uint id;
+        string fName;
+        string lName;
+        uint marks;
+    }
+
+    Student[] public stdRecords;
+    address owner = msg.sender;
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    function addNewRecords(
+        uint id,
+        string memory first,
+        string memory last,
+        uint marks
+    ) public onlyOwner {
+        stdRecords.push(Student(id, first, last, marks));
+    }
+
+    function viewMarks(uint index) public view returns (uint) {
+        return stdRecords[index].marks;
+    }
+
+    function bonusMarks(uint index, uint bonus) public onlyOwner {
+        stdRecords[index].marks += bonus;
+    }
+
+    receive() external payable {}
+
+    fallback() external payable {}
+}
